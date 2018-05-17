@@ -402,21 +402,16 @@ export class CardCarousel extends PureComponent {
         this.logger.log(`onVisibleIndexesChanged changed from: ${this.onScrollIndex} to: ${viewableItems[ 0 ].index}`);
 
         const index = viewableItems[ 0 ].index;
-        this.onIndexChanged(index);
+        this.onIndexChanged(index, "onVisibleIndexesChanged");
         // this.scrolling = true;
         this.cleanScrollingDebounce();
     };
 
-    onIndexChanged = index => {
+    onIndexChanged = (index, caller) => {
         if ( index !== this.onScrollIndex && !this.snappingToIndex ) {
             if ( this.reportScroll ) {
                 this.reportScroll = false;
-                // requestAnimationFrame(() =>
-                //     analyticsUtils.trackEvent("ApprovalsCarousel", "navigate", {
-                //         label: "swipe_carousel",
-                //         value: 0
-                //     })
-                // );
+                this.props.onCarouselReport && this.props.onCarouselReport(index, caller);
             }
             /// // requestAnimationFrame(() => {
             // // this.props.onSnapToItem(this.snappingToIndex);

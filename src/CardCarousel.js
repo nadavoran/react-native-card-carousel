@@ -315,14 +315,15 @@ export default class CardCarousel extends PureComponent {
         this.logger.log(`onVisibleIndexesChanged changed from: ${this.onScrollIndex} to: ${viewableItems[ 0 ].index}`);
 
         const index = viewableItems[ 0 ].index;
-        this.onIndexChanged(index);
+        this.onIndexChanged(index, "onIndexChanged");
         this.cleanScrollingDebounce();
     };
 
-    onIndexChanged = index => {
+    onIndexChanged = (index, caller) => {
         if ( index !== this.onScrollIndex && !this.snappingToIndex ) {
-            if ( this.reportScroll ) {
+            if (this.reportScroll ) {
                 this.reportScroll = false;
+                this.props.onCarouselReport && this.props.onCarouselReport(index, caller);
             }
             this.scrollIndex = index;
             this.props.onSnapToItem(index);
